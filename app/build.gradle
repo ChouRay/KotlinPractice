@@ -23,8 +23,13 @@ android {
     }
 
     //渠道Flavors
+    flavorDimensions "tier"
     productFlavors {
-        beta{}
+        beta {
+            // Assigns this product flavor to the "tier" flavor dimension. Specifying
+            // this property is optional if you are using only one dimension.
+            dimension "tier"
+        }
     }
 }
 
