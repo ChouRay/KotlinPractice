@@ -10,7 +10,7 @@ android {
         applicationId "chouray.com.practicekotlin"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode=1
+        versionCode 1
         versionName APP_VERSION
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
