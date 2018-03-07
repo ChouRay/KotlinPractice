@@ -21,6 +21,11 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+
+    //渠道Flavors
+    productFlavors {
+        beta{}
+    }
 }
 
 dependencies {
