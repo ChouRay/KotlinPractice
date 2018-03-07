@@ -4,14 +4,13 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
-def verCode = 1
 android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "chouray.com.practicekotlin"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode verCode
+        versionCode=1
         versionName APP_VERSION
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -43,9 +42,28 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
 
-
 android.applicationVariants.all { variant ->
     variant.outputs.all {
         outputFileName = "${variant.name}-${variant.versionName}.apk"
+    }
+}
+
+import java.util.regex.Pattern
+
+task('increaseVersionCode') << {
+    println("run task increaseVersionCode")
+    def buildFile = file("build.gradle")
+    def pattern = Pattern.compile("versionCode\\s+(\\d+)")
+    def manifestText = buildFile.getText()
+    def matcher = pattern.matcher(manifestText)
+    matcher.find()
+    def versionCode = Integer.parseInt(matcher.group(1))
+    def manifestContent = matcher.replaceAll("versionCode " + ++versionCode)
+    buildFile.write(manifestContent)
+}
+
+tasks.whenTaskAdded { task ->
+    if (task.name.matches('assemble.*?Debug')) {
+        task.dependsOn 'increaseVersionCode'
     }
 }
