@@ -4,14 +4,15 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+def verCode = 1
 android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "chouray.com.practicekotlin"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 2
-        versionName "1.1"
+        versionCode verCode
+        versionName APP_VERSION
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
