@@ -4,20 +4,48 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+//正式环境
+def API_RELEASE_HOST = "\"https://www.baidu.com/\""
+//开发环境
+def API_DEV_HOST = "\"https://www.google.com/\""
+
+
 android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "chouray.com.practicekotlin"
         minSdkVersion 15
         targetSdkVersion 26
-        versionCode 1
+        versionCode 45
         versionName APP_VERSION
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        release {
+            storeFile file('kotlindemo_keystore.jks')
+            storePassword "123456"
+            keyAlias "key0"
+            keyPassword "123456"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
+            
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField("String", "BASE_URL", API_RELEASE_HOST)
+        }
+        debug {
+            signingConfig signingConfigs.release
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            buildConfigField("String", "BASE_URL", API_DEV_HOST)
         }
     }
 
@@ -44,12 +72,15 @@ dependencies {
 
 android.applicationVariants.all { variant ->
     variant.outputs.all {
-        outputFileName = "${variant.name}-${variant.versionName}.apk"
+        if (IS_JENKINS) {
+            outputFileName = "${variant.name}-${variant.versionName}-${BUILD_TIME}.apk"
+        } else {
+            outputFileName = "${variant.name}-${variant.versionName}.apk"
+        }
     }
 }
 
 import java.util.regex.Pattern
-
 task('increaseVersionCode') << {
     println("run task increaseVersionCode")
     def buildFile = file("build.gradle")
@@ -63,7 +94,5 @@ task('increaseVersionCode') << {
 }
 
 tasks.whenTaskAdded { task ->
-    if (task.name.matches('assemble.*?Debug')) {
-        task.dependsOn 'increaseVersionCode'
-    }
+    task.dependsOn 'increaseVersionCode'
 }

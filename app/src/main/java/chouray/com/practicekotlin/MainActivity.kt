@@ -6,12 +6,15 @@ import android.widget.TextView
 
 class MainActivity : AppCompatActivity() {
 
+    val BASE_URL = BuildConfig.BASE_URL
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         var tvVersionName = findViewById<TextView>(R.id.id_tv_versionname)
-        tvVersionName.setText("VersionName: " +getVersionName() + "\nVersionCode: " + getVersionCode())
+        tvVersionName.setText("VersionName: " +getVersionName() + "\nVersionCode: " + getVersionCode()
+                + "\nurl: " + BASE_URL)
 
     }
 
